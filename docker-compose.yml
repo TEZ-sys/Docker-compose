@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  database:
+    image: postgres
+    restart: always
+    environment: 
+      - POSTGRES_PASSWORD=nk123
+    ports:
+      - 5436:5432  
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - net  
+
+  server:
+    image: nazarkorpal/projectx-backend
+    depends_on:
+      - database
+    networks:
+      - net
+    ports:
+      - 8080:8080  
+
+  client:
+    image: nazarkorpal/projectx-frontend
+    networks:
+      - net
+    ports:
+      - 80:80 
+    depends_on: 
+      - server
+
+volumes:
+  data:
+  
+networks:
+  net: 
+    driver: bridge 
